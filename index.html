@@ -3,117 +3,31 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
-<meta name="screen-orientation" content="landscape">
 <title>ビジュアルノベル</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;600&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
-html,body{
-  width:100%;height:100%;
-  background:#000;
-  overflow:hidden;
-  touch-action:none;
-}
-
-/* 横向き強制：縦向きのときは回転案内を表示 */
-#rotate-msg{
-  display:none;
-  position:fixed;inset:0;
-  background:#000;color:#c8a830;
-  font-family:'Noto Serif JP',serif;
-  font-size:18px;letter-spacing:.1em;
-  align-items:center;justify-content:center;
-  text-align:center;z-index:100;
-}
-@media (orientation:portrait){
-  #rotate-msg{display:flex;}
-  #vn{display:none;}
-}
-
-/* ゲーム本体：横向き時に画面全体 */
-#vn{
-  position:fixed;top:0;left:0;right:0;bottom:0;
-  cursor:pointer;
-  -webkit-tap-highlight-color:transparent;
-}
-#bg{
-  position:absolute;inset:0;
-  background-size:cover;
-  background-position:center;
-  background-color:#1a1228;
-}
+html,body{width:100%;height:100%;background:#000;overflow:hidden;touch-action:none;}
+#rotate-msg{display:none;position:fixed;inset:0;background:#000;color:#c8a830;font-family:sans-serif;font-size:18px;align-items:center;justify-content:center;text-align:center;z-index:100;}
+@media(orientation:portrait){#rotate-msg{display:flex;}#vn{display:none;}}
+#vn{position:fixed;top:0;left:0;right:0;bottom:0;cursor:pointer;-webkit-tap-highlight-color:transparent;}
+#bg{position:absolute;inset:0;background-size:cover;background-position:center;background-color:#1a1228;}
 #cc{position:absolute;inset:0;pointer-events:none;}
 
-/* ダイアログ：高さを vh で指定して横向きスマホでも十分な大きさに */
-#db{
-  position:absolute;
-  bottom:0;left:0;right:0;
-  height:42vh;
-  padding:0 2vw 2vh;
-  display:flex;
-  flex-direction:column;
-}
-#nt{
-  font-family:'Noto Serif JP',serif;
-  font-weight:600;
-  font-size:3.2vw;
-  padding:0.5vh 2vw;
-  letter-spacing:.1em;
-  border-radius:5px 5px 0 0;
-  border:3px solid #c8a830;
-  border-bottom:none;
-  align-self:flex-start;
-  margin-left:2vw;
-  z-index:2;position:relative;
-  white-space:nowrap;
-}
-#nt.h{display:none;}
-#di{
-  flex:1;
-  background:rgba(14,10,24,0.95);
-  border:3px solid #c8a830;
-  border-radius:0 8px 8px 8px;
-  padding:2vh 2.5vw 3vh;
-  position:relative;
-  z-index:2;
-  overflow:hidden;
-}
-#dt{
-  font-family:'Noto Serif JP',serif;
-  font-size:3.2vw;
-  color:#f0eaf5;
-  line-height:1.9;
-  letter-spacing:.04em;
-  white-space:pre-wrap;
-}
-#ni{
-  position:absolute;bottom:1vh;right:1.5vw;
-  width:1.2vw;height:1.2vw;
-  min-width:8px;min-height:8px;
-  border-right:2px solid #c8a830;
-  border-bottom:2px solid #c8a830;
-  transform:rotate(45deg);
-  animation:bn .8s infinite alternate;
-}
-@keyframes bn{
-  from{transform:rotate(45deg) translateY(-2px);opacity:.4;}
-  to{transform:rotate(45deg) translateY(2px);opacity:1;}
-}
-#sc{
-  position:absolute;top:1.5vh;left:50%;transform:translateX(-50%);
-  background:rgba(14,10,24,.82);color:rgba(200,168,80,.95);
-  font-family:'Noto Serif JP',serif;
-  font-size:2.2vw;
-  letter-spacing:.18em;padding:.5vh 2vw;
-  border:1px solid rgba(200,168,48,.5);border-radius:2px;
-  pointer-events:none;white-space:nowrap;z-index:3;
-}
+/* scene title */
+#sc{position:absolute;top:1.5vh;left:50%;transform:translateX(-50%);background:rgba(14,10,24,.85);color:rgba(200,168,80,.95);font-family:'Noto Serif JP',serif;font-size:2vw;letter-spacing:.18em;padding:.4vh 1.8vw;border:1px solid rgba(200,168,48,.5);border-radius:2px;pointer-events:none;white-space:nowrap;z-index:3;}
 #sc.h{display:none;}
-#ov{
-  position:absolute;inset:0;background:#000;
-  opacity:0;pointer-events:none;
-  transition:opacity .7s;z-index:10;
-}
+
+/* dialog: 45vh高さ、確実に3行入る */
+#db{position:absolute;bottom:0;left:0;right:0;height:45vh;padding:0 2vw 1.5vh;}
+#nt{font-family:'Noto Serif JP',serif;font-weight:600;font-size:2.4vw;padding:.3vh 1.5vw;letter-spacing:.1em;border-radius:5px 5px 0 0;border:3px solid #c8a830;border-bottom:none;align-self:flex-start;margin-left:2vw;z-index:2;position:relative;white-space:nowrap;display:inline-block;}
+#nt.h{display:none;}
+#di{position:absolute;bottom:1.5vh;left:2vw;right:2vw;top:0;background:rgba(14,10,24,0.95);border:3px solid #c8a830;border-radius:0 8px 8px 8px;padding:1.5vh 2vw 2.5vh;z-index:2;}
+/* #diのtopはname-tagの高さ分下げる→JS制御 */
+#dt{font-family:'Noto Serif JP',serif;font-size:2.2vw;color:#f0eaf5;line-height:1.85;letter-spacing:.04em;white-space:pre-wrap;}
+#ni{position:absolute;bottom:.8vh;right:1.2vw;width:1vw;height:1vw;min-width:7px;min-height:7px;border-right:2px solid #c8a830;border-bottom:2px solid #c8a830;transform:rotate(45deg);animation:bn .8s infinite alternate;}
+@keyframes bn{from{transform:rotate(45deg) translateY(-2px);opacity:.4;}to{transform:rotate(45deg) translateY(2px);opacity:1;}}
+#ov{position:absolute;inset:0;background:#000;opacity:0;pointer-events:none;transition:opacity .7s;z-index:10;}
 #ov.f{opacity:1;}
 </style>
 </head>
@@ -135,62 +49,87 @@ var BG_W="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAA0JCgsKCA0LCgs
 var NC={"教頭":{b:"#f5f0d8",t:"#3a3020"},"夏生":{b:"#1a2a50",t:"#c8d8f0"},"シン":{b:"#3a2e04",t:"#f5e060"}};
 var CL={kyoto:"教頭",natsuki:"夏生",shin:"シン"};
 var SC=[{"scene": "principal", "title": "■ 校長室", "speaker": "教頭", "text": "ああ、勢羽君。実習中に呼び出してすまないね", "chars": ["kyoto"]}, {"scene": "principal", "title": "■ 校長室", "speaker": "教頭", "text": "さっそくだが、これらに見覚えはあるかな？", "chars": ["kyoto"]}, {"scene": "principal", "title": "■ 校長室", "speaker": "夏生", "text": "……なんですか？　銃？", "chars": ["natsuki"]}, {"scene": "principal", "title": "■ 校長室", "speaker": "教頭", "text": "レーザー銃のようだね", "chars": ["kyoto"]}, {"scene": "principal", "title": "■ 校長室", "speaker": "教頭", "text": "撃つと光線が出て、銃弾よりも狙いやすく、\n銃弾の装填いらず、かつ速く対象に届くと謳われているらしい", "chars": ["kyoto"]}, {"scene": "principal", "title": "■ 校長室", "speaker": "夏生", "text": "へー、ちょっと触っても良いスか？", "chars": ["natsuki"]}, {"scene": "principal", "title": "■ 校長室", "speaker": "教頭", "text": "ああ", "chars": ["kyoto"]}, {"scene": "principal", "title": "■ 校長室", "speaker": "夏生", "text": "んー、言うほど質は良くなさそうスね", "chars": ["natsuki"]}, {"scene": "principal", "title": "■ 校長室", "speaker": "教頭", "text": "単刀直入にきくが、", "chars": ["kyoto"]}, {"scene": "principal", "title": "■ 校長室", "speaker": "教頭", "text": "それを作ったのは、君か？", "chars": ["kyoto"]}, {"scene": "principal", "title": "■ 校長室", "speaker": "夏生", "text": "は？　ちが……", "chars": ["natsuki"]}, {"scene": "principal", "title": "■ 校長室", "speaker": "夏生", "text": "（いや、むかし作った試作品にこんな物もあったか……？）", "chars": ["natsuki"], "inner": true}, {"scene": "principal", "title": "■ 校長室", "speaker": null, "text": "夏生が銃をくるりと回すと、グリップの底に\"NS\"という刻印が見つかった", "chars": []}, {"scene": "principal", "title": "■ 校長室", "speaker": "夏生", "text": "あー、作ったかもです", "chars": ["natsuki"]}, {"scene": "principal", "title": "■ 校長室", "speaker": "教頭", "text": "で、それを高額で売ったと？", "chars": ["kyoto"]}, {"scene": "principal", "title": "■ 校長室", "speaker": "夏生", "text": "はあ？　こんな粗悪品を？　何のことスか？", "chars": ["natsuki"]}, {"scene": "principal", "title": "■ 校長室", "speaker": "教頭", "text": "\"四ツ村賞を受賞した新進気鋭の天才発明家が開発した新製品\"\nとして武器市場に出回っているらしい", "chars": ["kyoto"]}, {"scene": "principal", "title": "■ 校長室", "speaker": "教頭", "text": "実際の使用者から、レーザーの飛距離が足りないとか壊れたとかのクレームがここJCCへ何件も届いている", "chars": ["kyoto"]}, {"scene": "principal", "title": "■ 校長室", "speaker": "夏生", "text": "は！？！？", "chars": ["natsuki"]}, {"scene": "black", "title": "", "speaker": null, "text": "", "chars": [], "blackout": true}, {"scene": "workshop", "title": "■ 工房", "speaker": "夏生", "text": "……。", "chars": ["natsuki"]}, {"scene": "workshop", "title": "■ 工房", "speaker": "シン", "text": "おー、セバ", "chars": ["shin"]}, {"scene": "workshop", "title": "■ 工房", "speaker": "シン", "text": "機嫌悪そうだな。なんか失敗したのか？", "chars": ["shin"]}, {"scene": "workshop", "title": "■ 工房", "speaker": "夏生", "text": "……何しに来たんだよ", "chars": ["natsuki"]}, {"scene": "workshop", "title": "■ 工房", "speaker": "シン", "text": "何って、遊びに来ただけだけど", "chars": ["shin"]}, {"scene": "workshop", "title": "■ 工房", "speaker": "夏生", "text": "……。", "chars": ["natsuki"]}, {"scene": "workshop", "title": "■ 工房", "speaker": "シン", "text": "何、俺なんか悪いことした？", "chars": ["shin"]}, {"scene": "workshop", "title": "■ 工房", "speaker": "夏生", "text": "……。", "chars": ["natsuki"]}, {"scene": "workshop", "title": "■ 工房", "speaker": "夏生", "text": "いや、何でもねー", "chars": ["natsuki"]}, {"scene": "workshop", "title": "■ 工房", "speaker": "夏生", "text": "ちょっと事情があって銃を分解してたんだけど、\nこれが明らかに俺が作った物じゃなくてイラついてたとこ", "chars": ["natsuki"]}, {"scene": "workshop", "title": "■ 工房", "speaker": "シン", "text": "ふーん？　とりあえずアルフォート食う？", "chars": ["shin"]}, {"scene": "workshop", "title": "■ 工房", "speaker": "夏生", "text": "あー、もらうわ", "chars": ["natsuki"]}, {"scene": "workshop", "title": "■ 工房", "speaker": "シン", "text": "へへっ、じゃあコーヒー淹れんな！\nポット借りるぜ", "chars": ["shin"]}, {"scene": "workshop", "title": "■ 工房", "speaker": "夏生", "text": "ん", "chars": ["natsuki"]}, {"scene": "workshop", "title": "■ 工房", "speaker": null, "text": "〜〜〜", "chars": []}, {"scene": "workshop", "title": "■ 工房", "speaker": "シン", "text": "つまり、身に覚えのないレーザー銃にセバのサインを入れて売られてたってことか？", "chars": ["shin"]}, {"scene": "workshop", "title": "■ 工房", "speaker": "夏生", "text": "そー", "chars": ["natsuki"]}, {"scene": "workshop", "title": "■ 工房", "speaker": "シン", "text": "なんで？", "chars": ["shin"]}, {"scene": "workshop", "title": "■ 工房", "speaker": "夏生", "text": "……", "chars": ["natsuki"]}, {"scene": "workshop", "title": "■ 工房", "speaker": "夏生", "text": "俺に恨みがあるか、\n俺をおとしいれようとしているのか、\n俺の名前を使ったら売れると思ったのか……", "chars": ["natsuki"]}, {"scene": "end", "title": "", "speaker": null, "text": "— つづく —", "chars": []}];
-var vn=document.getElementById("vn"),bg=document.getElementById("bg"),cc=document.getElementById("cc"),ctx=cc.getContext("2d"),dt=document.getElementById("dt"),nt=document.getElementById("nt"),sc=document.getElementById("sc"),db=document.getElementById("db"),ov=document.getElementById("ov");
+var vn=document.getElementById("vn"),bg=document.getElementById("bg"),cc=document.getElementById("cc"),ctx=cc.getContext("2d");
+var dt=document.getElementById("dt"),nt=document.getElementById("nt"),sc=document.getElementById("sc"),db=document.getElementById("db"),di=document.getElementById("di"),ov=document.getElementById("ov");
 var step=0,typing=false,tid=null,curScene="";
 
 function resize(){
   cc.width=vn.offsetWidth;
   cc.height=vn.offsetHeight;
+  layoutDialog();
   drawChars(step);
 }
 
-function setBg(scene){
-  if(scene===curScene)return;curScene=scene;
-  if(scene==="principal")bg.style.backgroundImage="url("+BG_P+")";
-  else if(scene==="workshop")bg.style.backgroundImage="url("+BG_W+")";
-  else{bg.style.backgroundImage="none";bg.style.backgroundColor="#000";}
+/* 名前タグの高さに合わせてdialog-innerのtopを調整 */
+function layoutDialog(){
+  var ntH = nt.classList.contains("h") ? 0 : nt.offsetHeight;
+  di.style.top = ntH + "px";
 }
 
+/* scene-titleの下端Y座標（canvas基準） */
+function getSceneTitleBottom(){
+  if(sc.classList.contains("h")) return vn.offsetHeight*0.08;
+  var r1=sc.getBoundingClientRect(), r2=vn.getBoundingClientRect();
+  return (r1.bottom - r2.top) + 8; // 8px余白
+}
+
+/* dbの上端Y座標（canvas基準） */
 function getDialogTop(){
-  var r1=db.getBoundingClientRect(),r2=vn.getBoundingClientRect();
-  return r1.top-r2.top;
+  var r1=db.getBoundingClientRect(), r2=vn.getBoundingClientRect();
+  return r1.top - r2.top;
 }
 
 function drawChars(i){
-  var s=SC[i],w=cc.width,h=cc.height;
+  var s=SC[i], w=cc.width, h=cc.height;
   ctx.clearRect(0,0,w,h);
-  if(!s.chars||!s.chars.length)return;
-  var top=getDialogTop();
+  if(!s.chars||!s.chars.length) return;
+  var dialogTop = getDialogTop();
+  var titleBottom = getSceneTitleBottom();
   for(var j=0;j<s.chars.length;j++){
-    drawSil(w/2,top,w,h,s.speaker===CL[s.chars[j]]);
+    drawSil(w/2, dialogTop, titleBottom, w, h, s.speaker===CL[s.chars[j]]);
   }
 }
 
-function drawSil(ox,bot,w,h,active){
-  ctx.save();ctx.fillStyle="#080808";ctx.globalAlpha=active?0.88:0.35;
-  var fh=Math.min(w*0.52,bot-h*0.05),ft=bot-fh,fw=fh*0.38;
-  var hh=fh*0.17,hcy=ft+hh*0.52;
-  ctx.beginPath();ctx.ellipse(ox,hcy,fw*0.25,hh/2,0,0,Math.PI*2);ctx.fill();
-  var nw=fw*0.14,nt2=ft+hh*0.88,nb=ft+hh*1.08;
-  ctx.fillRect(ox-nw/2,nt2,nw,nb-nt2);
-  var tt=nb,tb=ft+fh*0.60,sw=fw*0.80,ww=fw*0.68;
-  ctx.beginPath();ctx.moveTo(ox-sw/2,tt);ctx.lineTo(ox+sw/2,tt);ctx.lineTo(ox+ww/2,tb);ctx.lineTo(ox-ww/2,tb);ctx.closePath();ctx.fill();
-  var aw=fw*0.13,at=tt+(tb-tt)*0.04,ab=tb+fh*0.10;
-  ctx.beginPath();ctx.moveTo(ox-sw/2,at);ctx.lineTo(ox-sw/2-aw,at);ctx.lineTo(ox-sw/2-aw*0.7,ab);ctx.lineTo(ox-sw/2+aw*0.3,ab);ctx.closePath();ctx.fill();
-  ctx.beginPath();ctx.moveTo(ox+sw/2,at);ctx.lineTo(ox+sw/2+aw,at);ctx.lineTo(ox+sw/2+aw*0.7,ab);ctx.lineTo(ox+sw/2-aw*0.3,ab);ctx.closePath();ctx.fill();
-  var ht=tb,hb=ft+fh*0.68;ctx.fillRect(ox-fw*0.36,ht,fw*0.72,hb-ht);
-  var lw=fw*0.28,lg=fw*0.06;
-  ctx.fillRect(ox-lg/2-lw,hb,lw,bot-hb);ctx.fillRect(ox+lg/2,hb,lw,bot-hb);
+function drawSil(ox, bot, minTop, w, h, active){
+  ctx.save();
+  ctx.fillStyle="#080808";
+  ctx.globalAlpha = active ? 0.88 : 0.35;
+
+  var fh = Math.min(w*0.52, bot - minTop);
+  if(fh < 10){ ctx.restore(); return; }
+  var ft = bot - fh;
+  var fw = fh * 0.38;
+
+  // 頭
+  var hh=fh*0.17, hcy=ft+hh*0.52;
+  ctx.beginPath(); ctx.ellipse(ox,hcy,fw*0.25,hh/2,0,0,Math.PI*2); ctx.fill();
+  // 首
+  var nw=fw*0.14, nt2=ft+hh*0.88, nb=ft+hh*1.08;
+  ctx.fillRect(ox-nw/2, nt2, nw, nb-nt2);
+  // 胴
+  var tt=nb, tb=ft+fh*0.60, sw=fw*0.80, ww=fw*0.68;
+  ctx.beginPath(); ctx.moveTo(ox-sw/2,tt); ctx.lineTo(ox+sw/2,tt); ctx.lineTo(ox+ww/2,tb); ctx.lineTo(ox-ww/2,tb); ctx.closePath(); ctx.fill();
+  // 腕
+  var aw=fw*0.13, at=tt+(tb-tt)*0.04, ab=tb+fh*0.10;
+  ctx.beginPath(); ctx.moveTo(ox-sw/2,at); ctx.lineTo(ox-sw/2-aw,at); ctx.lineTo(ox-sw/2-aw*0.7,ab); ctx.lineTo(ox-sw/2+aw*0.3,ab); ctx.closePath(); ctx.fill();
+  ctx.beginPath(); ctx.moveTo(ox+sw/2,at); ctx.lineTo(ox+sw/2+aw,at); ctx.lineTo(ox+sw/2+aw*0.7,ab); ctx.lineTo(ox+sw/2-aw*0.3,ab); ctx.closePath(); ctx.fill();
+  // 腰
+  var ht=tb, hb=ft+fh*0.68;
+  ctx.fillRect(ox-fw*0.36, ht, fw*0.72, hb-ht);
+  // 脚
+  var lw=fw*0.28, lg=fw*0.06;
+  ctx.fillRect(ox-lg/2-lw, hb, lw, bot-hb);
+  ctx.fillRect(ox+lg/2,    hb, lw, bot-hb);
   ctx.restore();
 }
 
 function typeText(text){
   if(tid){clearInterval(tid);tid=null;}
-  dt.textContent="";var i=0;typing=true;
+  dt.textContent=""; var i=0; typing=true;
   tid=setInterval(function(){
     if(i<text.length){dt.textContent+=text[i];i++;}
     else{clearInterval(tid);tid=null;typing=false;}
-  },text.length>40?26:38);
+  }, text.length>40?26:38);
 }
 
 function go(i){
@@ -199,18 +138,29 @@ function go(i){
   if(s.title){sc.textContent=s.title;sc.classList.remove("h");}else{sc.classList.add("h");}
   if(s.speaker){
     var c=NC[s.speaker]||{b:"#2a2040",t:"#e0d8f0"};
-    nt.textContent=s.speaker;nt.style.background=c.b;nt.style.color=c.t;
-    nt.style.borderColor="#c8a830";nt.style.fontStyle=s.inner?"italic":"normal";
+    nt.textContent=s.speaker; nt.style.background=c.b; nt.style.color=c.t;
+    nt.style.borderColor="#c8a830"; nt.style.fontStyle=s.inner?"italic":"normal";
     nt.classList.remove("h");
   }else{nt.classList.add("h");}
-  requestAnimationFrame(function(){drawChars(i);});
   typeText(s.text);
+  // レイアウト確定後に描画
+  requestAnimationFrame(function(){
+    layoutDialog();
+    drawChars(i);
+  });
   if(ov.classList.contains("f")){setTimeout(function(){ov.classList.remove("f");},50);}
+}
+
+function setBg(scene){
+  if(scene===curScene)return; curScene=scene;
+  if(scene==="principal") bg.style.backgroundImage="url("+BG_P+")";
+  else if(scene==="workshop") bg.style.backgroundImage="url("+BG_W+")";
+  else{bg.style.backgroundImage="none"; bg.style.backgroundColor="#000";}
 }
 
 function show(i){
   if(i>=SC.length)return;
-  var s=SC[i],prev=i>0?SC[i-1].scene:null;
+  var s=SC[i], prev=i>0?SC[i-1].scene:null;
   if(s.blackout){ov.classList.add("f");setTimeout(function(){step++;show(step);},1400);return;}
   if(prev&&prev!==s.scene){ov.classList.add("f");setTimeout(function(){go(i);},700);}
   else{go(i);}
@@ -219,13 +169,15 @@ function show(i){
 function handleTap(){
   if(typing){
     if(tid){clearInterval(tid);tid=null;}
-    dt.textContent=SC[step].text;typing=false;
-  }else{step++;if(step<SC.length)show(step);}
+    dt.textContent=SC[step].text; typing=false;
+  }else{
+    step++; if(step<SC.length)show(step);
+  }
 }
 
-vn.addEventListener("click",handleTap);
-vn.addEventListener("touchend",function(e){e.preventDefault();handleTap();},{passive:false});
-window.addEventListener("resize",resize);
+vn.addEventListener("click", handleTap);
+vn.addEventListener("touchend", function(e){e.preventDefault();handleTap();},{passive:false});
+window.addEventListener("resize", resize);
 resize();
 show(0);
 </script>
