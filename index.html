@@ -95,10 +95,18 @@ function drawSil(ox, bot, minTop, w, h, active){
   ctx.fillStyle="#080808";
   ctx.globalAlpha = active ? 0.88 : 0.35;
 
-  var fh = Math.min(w*0.52, bot - minTop);
-  if(fh < 10){ ctx.restore(); return; }
-  var ft = bot - fh;
+  // figの大きさを決める（画面幅基準）
+  var fh = w * 0.52;
   var fw = fh * 0.38;
+
+  // 「腰」をdialogTop(bot)に合わせる → 下半身はウィンドウの下に隠れる
+  // 腰はfigureの68%位置 → figの上端ft = bot - fh*0.68
+  var ft = bot - fh * 0.68;
+
+  // 頭が場面タイトルより上に出ないようクランプ
+  if(ft < minTop){ ft = minTop; }
+
+  var figBottom = ft + fh; // 実際の足元（ウィンドウ下に隠れる）
 
   // 頭
   var hh=fh*0.17, hcy=ft+hh*0.52;
@@ -116,10 +124,10 @@ function drawSil(ox, bot, minTop, w, h, active){
   // 腰
   var ht=tb, hb=ft+fh*0.68;
   ctx.fillRect(ox-fw*0.36, ht, fw*0.72, hb-ht);
-  // 脚
+  // 脚（ウィンドウ下に隠れるが一応描く）
   var lw=fw*0.28, lg=fw*0.06;
-  ctx.fillRect(ox-lg/2-lw, hb, lw, bot-hb);
-  ctx.fillRect(ox+lg/2,    hb, lw, bot-hb);
+  ctx.fillRect(ox-lg/2-lw, hb, lw, figBottom-hb);
+  ctx.fillRect(ox+lg/2,    hb, lw, figBottom-hb);
   ctx.restore();
 }
 
