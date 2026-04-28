@@ -7,111 +7,24 @@
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;600&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
-html,body{
-  width:100%;height:100%;
-  background:#000;
-  overflow:hidden;
-  touch-action:manipulation;
-}
+html,body{width:100%;height:100%;background:#000;overflow:hidden;touch-action:manipulation;}
 #rotate-msg{display:none;position:fixed;inset:0;background:#000;color:#c8a830;font-family:sans-serif;font-size:18px;align-items:center;justify-content:center;text-align:center;z-index:100;}
 @media(orientation:portrait){#rotate-msg{display:flex;}#vn{display:none;}}
-
-#vn{
-  position:fixed;top:0;left:0;right:0;bottom:0;
-  background:#111;
-}
-#gun-img{
-  position:absolute;inset:0;
-  width:100%;height:100%;
-  object-fit:contain;
-  pointer-events:none;
-}
-
-/* 光エフェクト */
-#ripple{
-  position:absolute;
-  border-radius:50%;
-  width:100px;height:100px;
-  pointer-events:none;
-  display:none;
-  z-index:5;
-  transform:translate(-50%,-50%);
-  background:radial-gradient(circle,rgba(255,240,100,0.8) 0%,rgba(255,240,100,0) 70%);
-}
-#ripple.pop{
-  display:block;
-  animation:pop 0.5s ease-out forwards;
-}
-@keyframes pop{
-  0%{opacity:1;transform:translate(-50%,-50%) scale(0.1);}
-  100%{opacity:0;transform:translate(-50%,-50%) scale(3);}
-}
-
-/* SEARCH MODE */
-#mode-label{
-  position:absolute;top:1.5vh;left:50%;transform:translateX(-50%);
-  z-index:3;pointer-events:none;text-align:center;
-}
-#mode-title{
-  display:block;background:rgba(14,10,24,.88);color:rgba(200,168,80,.95);
-  font-family:'Noto Serif JP',serif;font-size:2vw;
-  letter-spacing:.25em;padding:.4vh 2vw;
-  border:1px solid rgba(200,168,48,.5);border-radius:3px 3px 0 0;white-space:nowrap;
-}
-#mode-hint{
-  display:block;background:rgba(14,10,24,.82);color:rgba(220,80,60,0.95);
-  font-family:'Noto Serif JP',serif;font-size:1.6vw;
-  letter-spacing:.1em;padding:.3vh 2vw;
-  border:1px solid rgba(200,168,48,.3);border-top:none;
-  border-radius:0 0 3px 3px;white-space:nowrap;
-}
-
-/* 発見マーク */
-.fmark{
-  position:absolute;
-  width:2.5vw;height:2.5vw;min-width:16px;min-height:16px;
-  border-radius:50%;
-  border:2px solid rgba(200,168,48,0.9);
-  background:rgba(200,168,48,0.3);
-  pointer-events:none;z-index:4;
-  transform:translate(-50%,-50%);
-  display:flex;align-items:center;justify-content:center;
-  color:rgba(200,168,48,1);font-size:1.4vw;font-weight:bold;
-}
-
-/* ダイアログ */
-#dlg{
-  position:absolute;bottom:0;left:0;right:0;
-  padding:0 2vw 1.5vh;
-  z-index:6;
-  display:none;
-}
+#vn{position:fixed;top:0;left:0;right:0;bottom:0;background:#111;}
+#gun-img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;pointer-events:none;}
+#ripple{position:absolute;border-radius:50%;width:100px;height:100px;pointer-events:none;display:none;z-index:5;transform:translate(-50%,-50%);background:radial-gradient(circle,rgba(255,240,100,0.8) 0%,rgba(255,240,100,0) 70%);}
+#ripple.pop{display:block;animation:pop 0.5s ease-out forwards;}
+@keyframes pop{0%{opacity:1;transform:translate(-50%,-50%) scale(0.1);}100%{opacity:0;transform:translate(-50%,-50%) scale(3);}}
+#mode-label{position:absolute;top:1.5vh;left:50%;transform:translateX(-50%);z-index:3;pointer-events:none;text-align:center;}
+#mode-title{display:block;background:rgba(14,10,24,.88);color:rgba(200,168,80,.95);font-family:'Noto Serif JP',serif;font-size:2vw;letter-spacing:.25em;padding:.4vh 2vw;border:1px solid rgba(200,168,48,.5);border-radius:3px 3px 0 0;white-space:nowrap;}
+#mode-hint{display:block;background:rgba(14,10,24,.82);color:rgba(220,80,60,0.95);font-family:'Noto Serif JP',serif;font-size:1.6vw;letter-spacing:.1em;padding:.3vh 2vw;border:1px solid rgba(200,168,48,.3);border-top:none;border-radius:0 0 3px 3px;white-space:nowrap;}
+.fmark{position:absolute;width:2.5vw;height:2.5vw;min-width:16px;min-height:16px;border-radius:50%;border:2px solid rgba(200,168,48,0.9);background:rgba(200,168,48,0.3);pointer-events:none;z-index:4;transform:translate(-50%,-50%);display:flex;align-items:center;justify-content:center;color:rgba(200,168,48,1);font-size:1.4vw;font-weight:bold;}
+#dlg{position:absolute;bottom:0;left:0;right:0;padding:0 2vw 1.5vh;z-index:6;display:none;}
 #dlg.show{display:block;}
-#dlg-box{
-  background:rgba(14,10,24,0.95);
-  border:3px solid #c8a830;
-  border-radius:8px;
-  padding:1.8vh 4vw 1.8vh 2.5vw;
-  position:relative;
-}
-#dlg-text{
-  font-family:'Noto Serif JP',serif;
-  font-size:2.2vw;color:#f0eaf5;
-  line-height:1.85;letter-spacing:.04em;white-space:pre-wrap;
-}
-#dlg-x{
-  position:absolute;top:.8vh;right:1vw;
-  color:rgba(200,168,80,.9);font-size:3vw;
-  line-height:1;padding:.3vh .6vw;cursor:pointer;
-}
-#next-btn{
-  display:none;margin-top:1vh;float:right;
-  background:rgba(200,168,48,0.15);
-  border:2px solid #c8a830;color:#c8a830;
-  font-family:'Noto Serif JP',serif;font-size:2vw;
-  letter-spacing:.15em;padding:.5vh 2.5vw;
-  border-radius:4px;cursor:pointer;
-}
+#dlg-box{background:rgba(14,10,24,0.95);border:3px solid #c8a830;border-radius:8px;padding:1.8vh 4vw 1.8vh 2.5vw;position:relative;}
+#dlg-text{font-family:'Noto Serif JP',serif;font-size:2.2vw;color:#f0eaf5;line-height:1.85;letter-spacing:.04em;white-space:pre-wrap;}
+#dlg-x{position:absolute;top:.8vh;right:1vw;color:rgba(200,168,80,.9);font-size:3vw;line-height:1;padding:.3vh .6vw;cursor:pointer;}
+#next-btn{display:none;margin-top:1vh;float:right;background:rgba(200,168,48,0.15);border:2px solid #c8a830;color:#c8a830;font-family:'Noto Serif JP',serif;font-size:2vw;letter-spacing:.15em;padding:.5vh 2.5vw;border-radius:4px;cursor:pointer;}
 #next-btn.show{display:block;}
 </style>
 </head>
@@ -132,7 +45,6 @@ html,body{
     <button id="next-btn">次へ進む ▶</button>
   </div>
 </div>
-
 <script>
 var ZONES=[
   {id:"A",x1:0.02,y1:0.28,x2:0.21,y2:0.74,text:"レーザーが出るようだ。出力は弱そうだ"},
@@ -142,7 +54,7 @@ var ZONES=[
 var IMG_ASPECT=1536/1024;
 var found={};
 var dlgOpen=false;
-var closingDlg=false;
+var tapX=0,tapY=0;
 
 var vn=document.getElementById("vn");
 var rpl=document.getElementById("ripple");
@@ -152,77 +64,48 @@ var dlgX=document.getElementById("dlg-x");
 var nBtn=document.getElementById("next-btn");
 
 function getImgRect(){
-  var vw=vn.offsetWidth,vh=vn.offsetHeight;
-  var ba=vw/vh,ia=IMG_ASPECT,dw,dh,ox,oy;
+  var vw=vn.offsetWidth,vh=vn.offsetHeight,ba=vw/vh,ia=IMG_ASPECT,dw,dh,ox,oy;
   if(ba>ia){dh=vh;dw=vh*ia;ox=(vw-dw)/2;oy=0;}
   else{dw=vw;dh=vw/ia;ox=0;oy=(vh-dh)/2;}
   return{x:ox,y:oy,w:dw,h:dh};
 }
-
 function hitZone(px,py){
-  var r=getImgRect();
-  var rx=(px-r.x)/r.w,ry=(py-r.y)/r.h;
+  var r=getImgRect(),rx=(px-r.x)/r.w,ry=(py-r.y)/r.h;
   if(rx<0||rx>1||ry<0||ry>1)return null;
-  for(var i=0;i<ZONES.length;i++){
-    var z=ZONES[i];
-    if(rx>=z.x1&&rx<=z.x2&&ry>=z.y1&&ry<=z.y2)return z;
-  }
+  for(var i=0;i<ZONES.length;i++){var z=ZONES[i];if(rx>=z.x1&&rx<=z.x2&&ry>=z.y1&&ry<=z.y2)return z;}
   return null;
 }
-
 function showRipple(px,py){
   rpl.style.left=px+"px";rpl.style.top=py+"px";
-  rpl.classList.remove("pop");
-  void rpl.offsetWidth;
-  rpl.classList.add("pop");
+  rpl.classList.remove("pop");void rpl.offsetWidth;rpl.classList.add("pop");
 }
-
 function addMark(z){
-  var r=getImgRect();
-  var cx=r.x+r.w*(z.x1+z.x2)/2;
-  var cy=r.y+r.h*(z.y1+z.y2)/2;
-  var mk=document.createElement("div");
-  mk.className="fmark";mk.style.left=cx+"px";mk.style.top=cy+"px";mk.textContent="✓";
-  vn.appendChild(mk);
+  var r=getImgRect(),cx=r.x+r.w*(z.x1+z.x2)/2,cy=r.y+r.h*(z.y1+z.y2)/2;
+  var mk=document.createElement("div");mk.className="fmark";mk.style.left=cx+"px";mk.style.top=cy+"px";mk.textContent="✓";vn.appendChild(mk);
 }
+function openDlg(text){dlgT.textContent=text;dlg.classList.add("show");dlgOpen=true;}
+function closeDlg(){dlg.classList.remove("show");dlgOpen=false;}
 
-function openDlg(text){
-  dlgT.textContent=text;dlg.classList.add("show");dlgOpen=true;
-}
-function closeDlg(){
-  dlg.classList.remove("show");dlgOpen=false;closingDlg=true;
-  setTimeout(function(){closingDlg=false;},300);
-}
-
-function handleTap(px,py){
-  if(closingDlg)return;
-  // ✕ボタンエリア
+// ✕ボタンとnextボタンはvnのhandleTapで座標判定して処理
+function handleTap(){
+  var px=tapX,py=tapY;
   if(dlgOpen){
     var xr=dlgX.getBoundingClientRect();
-    if(px>=xr.left&&px<=xr.right&&py>=xr.top&&py<=xr.bottom){
-      closeDlg();return;
-    }
-    // 次へボタンエリア
+    if(px>=xr.left&&px<=xr.right&&py>=xr.top&&py<=xr.bottom){closeDlg();return;}
     if(nBtn.classList.contains("show")){
       var nr=nBtn.getBoundingClientRect();
-      if(px>=nr.left&&px<=nr.right&&py>=nr.top&&py<=nr.bottom){
-        alert("次のシーンへ（デモ）");return;
-      }
+      if(px>=nr.left&&px<=nr.right&&py>=nr.top&&py<=nr.bottom){alert("次のシーンへ（デモ）");return;}
     }
     return;
   }
   showRipple(px,py);
   var z=hitZone(px,py);
-  if(z){
-    if(!found[z.id]){found[z.id]=true;addMark(z);}
-    openDlg(z.text);
-    if(z.id==="C")nBtn.classList.add("show");
-  }
+  if(z){if(!found[z.id]){found[z.id]=true;addMark(z);}openDlg(z.text);if(z.id==="C")nBtn.classList.add("show");}
 }
 
-// visual_novel.htmlと完全に同じ方式（vn要素に登録）
-vn.addEventListener("click",function(e){ handleTap(e.clientX,e.clientY); });
-vn.addEventListener("touchend",function(e){ handleTap(e.changedTouches[0].clientX,e.changedTouches[0].clientY); },{passive:true});
+// visual_novel.htmlと完全に同じ形式
+vn.addEventListener("click",function(e){tapX=e.clientX;tapY=e.clientY;handleTap();});
+vn.addEventListener("touchend",function(e){tapX=e.changedTouches[0].clientX;tapY=e.changedTouches[0].clientY;handleTap();},{passive:true});
 </script>
 </body>
 </html>
