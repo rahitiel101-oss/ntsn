@@ -229,7 +229,8 @@ function selectChoice(opt){
   choiceWrap.innerHTML="";
   currentSC=opt.branch;
   step=0;
-  show(step);
+  // 選択ボタンのタップがhandleTapに連鎖しないよう300ms遅らせる
+  setTimeout(function(){ show(0); }, 300);
 }
 
 /* ステップ表示 */
