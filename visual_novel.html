@@ -135,7 +135,7 @@ var searchHint=document.getElementById("search-hint"),rpl=document.getElementByI
 var searchSplash=document.getElementById("search-splash");
 var sdlg=document.getElementById("sdlg"),sdlgT=document.getElementById("sdlg-text"),sdlgX=document.getElementById("sdlg-x"),nSBtn=document.getElementById("next-search-btn");
 var choiceWrap=document.getElementById("choice-wrap");
-var step=0,typing=false,tid=null,curScene="",searchMode=false,sdlgOpen=false,searchFound={},tapX=0,tapY=0;
+var step=0,typing=false,tid=null,curScene="",searchMode=false,sdlgOpen=false,searchFound={},tapX=0,tapY=0,blockTap=false;
 var currentSC=SC; // 現在のシナリオ配列（選択肢で切り替わる）
 
 function resize(){cc.width=vn.offsetWidth;cc.height=vn.offsetHeight;layoutDialog();drawChars(step);}
@@ -229,8 +229,8 @@ function selectChoice(opt){
   choiceWrap.innerHTML="";
   currentSC=opt.branch;
   step=0;
-  // 選択ボタンのタップがhandleTapに連鎖しないよう300ms遅らせる
-  setTimeout(function(){ show(0); }, 300);
+  blockTap=true;
+  setTimeout(function(){ blockTap=false; show(0); }, 600);
 }
 
 /* ステップ表示 */
@@ -295,6 +295,7 @@ function show(i){
 }
 
 function handleTap(){
+  if(blockTap)return;
   var px=tapX,py=tapY;
 
   // 選択肢表示中はボタンに任せる
