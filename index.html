@@ -220,13 +220,9 @@ function handleTap(px,py){
   }
 }
 
-// タップテストと全く同じ方式
-document.addEventListener("touchend",function(e){
-  handleTap(e.changedTouches[0].clientX,e.changedTouches[0].clientY);
-});
-document.addEventListener("click",function(e){
-  handleTap(e.clientX,e.clientY);
-});
+// visual_novel.htmlと完全に同じ方式（vn要素に登録）
+vn.addEventListener("click",function(e){ handleTap(e.clientX,e.clientY); });
+vn.addEventListener("touchend",function(e){ handleTap(e.changedTouches[0].clientX,e.changedTouches[0].clientY); },{passive:true});
 </script>
 </body>
 </html>
