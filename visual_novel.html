@@ -216,8 +216,14 @@ function showChoice(s){
       var btn=document.createElement("button");
       btn.className="choice-btn";
       btn.textContent=opt.label;
-      btn.addEventListener("click",function(){selectChoice(opt);});
-      btn.addEventListener("touchend",function(e){selectChoice(opt);});
+      var chosen=false;
+      function doSelect(){
+        if(chosen)return;
+        chosen=true;
+        selectChoice(opt);
+      }
+      btn.addEventListener("touchend",function(e){ doSelect(); });
+      btn.addEventListener("click",function(e){ doSelect(); });
       choiceWrap.appendChild(btn);
     })(s.options[i]);
   }
