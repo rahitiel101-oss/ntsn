@@ -280,34 +280,41 @@ function handleTap(px, py){
   }
 }
 
-vn.addEventListener("click", function(e){
-  handleTap(e.clientX, e.clientY);
-});
+// タッチ判定：touchendを使い、clickは呼ばせない
+var touched = false;
+
+vn.addEventListener("touchstart", function(e){
+  touched = true;
+}, {passive:true});
+
 vn.addEventListener("touchend", function(e){
   e.preventDefault();
   var t = e.changedTouches[0];
   handleTap(t.clientX, t.clientY);
 }, {passive:false});
 
-dlgClose.addEventListener("click", function(e){
-  e.stopPropagation();
-  hideDialog();
+vn.addEventListener("click", function(e){
+  if(touched){ touched = false; return; } // touchendが既に処理済み
+  handleTap(e.clientX, e.clientY);
 });
+
 dlgClose.addEventListener("touchend", function(e){
   e.preventDefault();
   e.stopPropagation();
   hideDialog();
 }, {passive:false});
-
-nextBtn.addEventListener("click", function(e){
+dlgClose.addEventListener("click", function(e){
   e.stopPropagation();
-  alert("次のシーンへ進みます（デモ）");
 });
+
 nextBtn.addEventListener("touchend", function(e){
   e.preventDefault();
   e.stopPropagation();
   alert("次のシーンへ進みます（デモ）");
 }, {passive:false});
+nextBtn.addEventListener("click", function(e){
+  e.stopPropagation();
+});
 
 window.addEventListener("resize", function(){
   // マークを再描画したい場合はここで
