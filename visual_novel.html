@@ -185,14 +185,15 @@ function drawCharImg(imgUrl, dialogTop, titleBottom, w, h, active){
   ctx.save();
   ctx.globalAlpha = active ? 0.92 : 0.35;
 
-  // 画像サイズ：縦は腰がdialogTopに合うよう配置
-  // 画像は縦長（約0.6:1のアスペクト比）
+  // drawSilと同じスケールで配置
+  // drawSilのfh=w*0.52、腰位置はfh*0.68 → 腰までの高さ = w*0.52*0.68 ≈ w*0.354
+  // 画像下端を腰位置(dialogTop)に合わせ、高さをw*0.52*0.68/0.68 = w*0.52に設定
   var imgAspect = img.naturalWidth / img.naturalHeight;
   var fh = w * 0.52;
-  var fw = fh * imgAspect;
-  // 腰（画像の下端）をdialogTopに合わせる
-  var drawH = fh;
-  var drawW = fw;
+  // 画像の下端が腰位置(dialogTop)に来るように
+  // 画像は頭〜肩なので、drawSilの全体高さ(fh)と同じスケールで表示する
+  var drawH = fh * 1.5; // 大きめに表示して腰がdialogTopに接するよう調整
+  var drawW = drawH * imgAspect;
   var drawX = w/2 - drawW/2;
   var drawY = dialogTop - drawH;
 
