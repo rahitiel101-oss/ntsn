@@ -186,19 +186,25 @@ function drawCharImg(imgUrl, dialogTop, titleBottom, w, h, active){
   ctx.globalAlpha = active ? 0.92 : 0.35;
 
   var imgAspect = img.naturalWidth / img.naturalHeight;
-  // 画像の下端をdialogTopにぴったり合わせる
-  // 高さは画面幅の80%（drawSilより大きめ）
-  var drawH = w * 0.80;
+  // dbのBoundingClientRectを直接使って正確な位置を計算
+  var dbEl = document.getElementById("db");
+  var vnEl = document.getElementById("vn");
+  var dbRect = dbEl.getBoundingClientRect();
+  var vnRect = vnEl.getBoundingClientRect();
+  var exactDialogTop = dbRect.top - vnRect.top;
+  var exactTitleBottom = (function(){
+    var scEl = document.getElementById("sc");
+    if(scEl.classList.contains("h")) return vnEl.offsetHeight * 0.08;
+    var scRect = scEl.getBoundingClientRect();
+    return scRect.bottom - vnRect.top + 8;
+  })();
+
+  // 下端をダイアログ上端にぴったり合わせ、使える高さいっぱいに表示
+  var availH = exactDialogTop - exactTitleBottom;
+  var drawH = availH;
   var drawW = drawH * imgAspect;
-
-  // 頭が titleBottom より上に出ないようにクランプ
-  if(drawH > dialogTop - titleBottom){
-    drawH = dialogTop - titleBottom;
-    drawW = drawH * imgAspect;
-  }
-
   var drawX = w/2 - drawW/2;
-  var drawY = dialogTop - drawH; // 下端をdialogTopにぴったり合わせる
+  var drawY = exactDialogTop - drawH;
 
   ctx.drawImage(img, drawX, drawY, drawW, drawH);
   ctx.restore();
